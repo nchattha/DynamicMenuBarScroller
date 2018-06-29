@@ -1,0 +1,23 @@
+﻿<Properties StartupConfiguration="{D946B12E-538E-26B5-1087-A08FBFC73A7B}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/TypeControllerScriptNew.cs">
+    <Files>
+      <File FileName="Assets/Scripts/MenuDropDown/MenuList.cs" Line="18" Column="13" />
+      <File FileName="Assets/Scripts/MenuDropDown/MenuColumnList.cs" Line="15" Column="7" />
+      <File FileName="Assets/Scripts/MenuDropDown/MenuSubCell.cs" Line="6" Column="1" />
+      <File FileName="Assets/Scripts/TypeControllerScriptNew.cs" Line="61" Column="6" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Assets/Scripts/TypeControllerScriptNew.cs" relfile="Assets/Scripts/TypeControllerScriptNew.cs" line="55" column="1" />
+      <Breakpoint file="/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Assets/Scripts/MenuDropDown/MenuList.cs" relfile="Assets/Scripts/MenuDropDown/MenuList.cs" line="87" column="1" />
+      <Breakpoint file="/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Assets/Scripts/MenuDropDown/MenuList.cs" relfile="Assets/Scripts/MenuDropDown/MenuList.cs" line="92" column="1" />
+      <Breakpoint file="/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Assets/Scripts/MenuDropDown/MenuColumnList.cs" relfile="Assets/Scripts/MenuDropDown/MenuColumnList.cs" line="35" column="1" />
+      <Breakpoint file="/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Assets/Scripts/MenuDropDown/MenuColumnList.cs" relfile="Assets/Scripts/MenuDropDown/MenuColumnList.cs" line="79" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
