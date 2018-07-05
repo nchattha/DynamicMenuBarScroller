@@ -10,14 +10,14 @@ namespace Menu.UI.Dropdown
 
         public Text Name;
         public Image Image;
-        private bool ImageStatus { get; set; }
+        private bool ImageStatus = false;
 
 
 
         // Use this for initialization
         void Start()
         {
-
+            Image.gameObject.SetActive(ImageStatus);
         }
 
         // Update is called once per frame
@@ -32,7 +32,13 @@ namespace Menu.UI.Dropdown
             {
                 Name.text = _name;
                 Image.gameObject.SetActive(_status);
+                ImageStatus = _status;
             }
+        }
+        public void toggleImage()
+        {
+            ImageStatus = !ImageStatus;
+            Image.gameObject.SetActive(ImageStatus);
         }
     }
 }

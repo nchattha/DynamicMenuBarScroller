@@ -60,16 +60,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CustomMenu.cs" />
+    <Compile Include="Assets\Scripts\MenuDropDown\MenuColumnList Main.cs" />
     <Compile Include="Assets\Scripts\MenuDropDown\MenuColumnList.cs" />
+    <Compile Include="Assets\Scripts\MenuDropDown\MenuColumnListMain2.cs" />
     <Compile Include="Assets\Scripts\MenuDropDown\MenuList.cs" />
     <Compile Include="Assets\Scripts\MenuDropDown\MenuSubCell.cs" />
     <Compile Include="Assets\Scripts\TypeControllerScript.cs" />
     <Compile Include="Assets\Scripts\TypeControllerScriptNew.cs" />
-    <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.PackageManagerUI.Editor">
+      <HintPath>/Users/navdeep/Documents/UnityLearning/DynamicMenuBarScroller/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

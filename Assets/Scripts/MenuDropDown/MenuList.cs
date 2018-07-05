@@ -9,9 +9,7 @@ namespace Menu.UI.Dropdown
         GameObject menuViewPrefab;
         private List<KeyValuePair<int, GameObject>> MenuItem = new List<KeyValuePair<int, GameObject>>();
         // Use this for initialization
-        private static int menuCount = 0;
-        private const int FRAME_OFFSET = 5;
-
+       
 
         void Start()
         {
