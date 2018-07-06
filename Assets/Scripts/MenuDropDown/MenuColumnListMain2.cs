@@ -25,7 +25,7 @@ namespace Menu.UI.Dropdown
         private GameObject Menu1;
         private string clickedMenu1;
         private GameObject Menu2;
-        private bool clickedMenu2; 
+       
 
         private List<KeyValuePair<string,GameObject>> MenuItem1 = new List<KeyValuePair<string, GameObject>>();
         private List<KeyValuePair<string, GameObject>> MenuItem2 = new List<KeyValuePair<string, GameObject>>();
@@ -40,7 +40,6 @@ namespace Menu.UI.Dropdown
             for (int i = 0; i < 6; i++)
             {
                 Data lData = new Data();
-                lData.level = 0;
                 lData.key =  i.ToString();
                 lData.value = "tag" + i.ToString();
                 lData.nestedData = new List<Data>();
@@ -48,7 +47,6 @@ namespace Menu.UI.Dropdown
                 {
                     if( lData.nestedData != null){
                         Data lData1 = new Data();
-                        lData1.level = 1;
                         lData1.key = i.ToString() + "-" + j.ToString();
                         lData1.value = "tag" + i.ToString() + "-" + j.ToString();
                         lData1.nestedData = new List<Data>();
@@ -57,10 +55,8 @@ namespace Menu.UI.Dropdown
                             if (lData.nestedData != null)
                             {
                                 Data lData2 = new Data();
-                                lData2.level = 2;
                                 lData2.key = i.ToString() + "-" + j.ToString()+"-" + k.ToString();
                                 lData2.value = "tag" + i.ToString() + "-" + j.ToString()+ "-" + k.ToString();
-
 
                                 lData1.nestedData.Add(lData2);
                             }
@@ -93,7 +89,7 @@ namespace Menu.UI.Dropdown
                 clickedMenu1 = "";
                 Menu2.transform.SetParent(MenuView.transform, false);
             }
-            clickedMenu2 = false;
+            //clickedMenu2 = false;
             GenerateMenu();
         }
         // Update is called once per frame
@@ -299,10 +295,10 @@ namespace Menu.UI.Dropdown
             if(!_object.GetComponentInChildren<Text>().color.Equals(Color.cyan) ){
                 tempColor = _object.GetComponentInChildren<Text>().color;
                 _object.GetComponentInChildren<Text>().color = Color.cyan;
-                clickedMenu2 = true;
+                //clickedMenu2 = true;
             }else{
                 _object.GetComponentInChildren<Text>().color = tempColor;
-                clickedMenu2 = false;
+               // clickedMenu2 = false;
             }
 
             Debug.Log("NEXT " + _data);

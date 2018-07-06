@@ -6,7 +6,6 @@ using System;
 namespace Menu.UI.Dropdown
 {
     public class Data{
-        public int level { set; get; }
         public string key { set; get; }
         public string value { set; get; }
         public bool selected { set; get; }
@@ -52,15 +51,16 @@ namespace Menu.UI.Dropdown
         private List<Data> tagData = new List<Data>(); //main lsit containg all data
         private static int tagCount = 0;
         private bool newTagAdded = false;
+        private GameObject lastClickedObject;
+        private List<Data> LastClickeddata; 
+        private List<Data> NewSubdata; 
 
-
-
+        //Database demo funtionality - output - list named raw with Data (class) as an argument
         void FeedMenuBar(){
             
             for (int i = 0; i < 26; i++)
             {
                 Data lData = new Data();
-                lData.level = 0;
                 lData.key =  i.ToString();
                 lData.value = "tag" + i.ToString();
                 lData.selected = false;
@@ -70,7 +70,6 @@ namespace Menu.UI.Dropdown
                 {
                     if( lData.nestedData != null){
                         Data lData1 = new Data();
-                        lData1.level = 1;
                         lData1.key = i.ToString() + "-" + j.ToString();
                         lData1.value = "tag" + i.ToString() + "-" + j.ToString();
                         lData1.selected = false;
@@ -81,7 +80,6 @@ namespace Menu.UI.Dropdown
                             if (lData.nestedData != null)
                             {
                                 Data lData2 = new Data();
-                                lData2.level = 2;
                                 lData2.key = i.ToString() + "-" + j.ToString()+"-" + k.ToString();
                                 lData2.value = "tag" + i.ToString() + "-" + j.ToString()+ "-" + k.ToString();
                                 lData2.selected = false;
@@ -96,48 +94,43 @@ namespace Menu.UI.Dropdown
             }
         }
       
-        int level = 2;
+      
         // Use this for initialization
         void Start()
         {
+            //check the intial prefab & initialize the Menu1 & menu2
             if (MenuView != null && Menu1 == null)
             {
                 Menu1 = Instantiate(Menu);
                 Menu1.SetActive(false);
                 Menu1.transform.SetParent(MenuView.transform, false);
-            }
 
-            FeedMenuBar();
-
-            if (level == 2)
-            {
                 Menu2 = Instantiate(Menu);
                 Menu2.SetActive(false);
                 Menu2.transform.SetParent(MenuView.transform, false);
+
             }
+
+            FeedMenuBar(); //Database utiliy 
             GenerateMenu();// generate the intial view 
         }
+
         // Update is called once per frame
         void FixedUpdate()
         {
-            if( newTagAdded){
+            if( newTagAdded){ //need to scrol the tag panel to far right or to last tag item
                 myScrollRect.horizontalNormalizedPosition = 1;
                 newTagAdded = false;
             }
-
-          
-
         }
 
-        //Initial the menu bar 
+        //Initial the item for the main menu bar 
         public void GenerateMenu(){
-            if (MenuItem1.Count > 0){
-                foreach (Transform t in Menu1.transform)
-                    Destroy(t.gameObject);
-                
-                MenuItem1.Clear();
-            }
-              
+
+            //need to delete the menu item objects 
+            destoryMenu1DataObjects(); 
+
+            // feed the main menu from the main raw data
             for (int i = 0; i < raw.Count; i++)
             {
                 string current = raw[i].key;
@@ -150,17 +143,14 @@ namespace Menu.UI.Dropdown
                     onClickSlectedMenuItemButton(lDataObj, lGameObj);
                 });
 
-               
-
+                //checked the object before setting it to parent
                 if (MenuItem1[i].Value != null)
                 {
                     string sub = raw[i].value;
-
-                    MenuItem1[i].Value.GetComponentInChildren<Text>().text =  sub;
-
+                    MenuItem1[i].Value.GetComponentInChildren<Text>().text =  sub;  //setting the text
                     Menu1.SetActive(true);
-                    MenuItem1[i].Value.transform.SetParent(Menu1.GetComponent<ScrollRect>().content, false);
-                    MenuItem1[i].Value.gameObject.SetActive(true);
+                    MenuItem1[i].Value.transform.SetParent(Menu1.GetComponent<ScrollRect>().content, false);    //setting the parent value
+                    MenuItem1[i].Value.gameObject.SetActive(true);// activating the new cell component
                    
                 }
             }//for loop ends
@@ -168,7 +158,7 @@ namespace Menu.UI.Dropdown
         }
 
        
-
+        //function to destroy the Menu1 objects
         public void destoryMenu1DataObjects()
         {
             if (MenuItem1.Count > 0 )
@@ -181,6 +171,7 @@ namespace Menu.UI.Dropdown
           
         }
 
+        //function to destroy the Menu2 objects
         public void destoryMenu2DataObjects()
         {
            if (MenuItem2.Count > 0)
@@ -193,10 +184,10 @@ namespace Menu.UI.Dropdown
 
         }
 
-
+        // General functions to pop up the menu prefab with data 
         public void GenerateSubMenu(List<Data> _menu1Data,GameObject _menu1Prefab, List<Data> _menu2Data, GameObject _menu2Prefab ){
 
-            if (_menu1Prefab != null)
+            if (_menu1Prefab != null) //validating the menu prefab data
             {
                 destoryMenu1DataObjects();
                 Menu1.SetActive(true);
@@ -206,7 +197,7 @@ namespace Menu.UI.Dropdown
                     GenerateMenuData(_menu1Data, _menu1Prefab, MenuItem1, parent);
             }
 
-            if(_menu2Prefab != null){
+            if(_menu2Prefab != null){ //validating the menu prefab data
                 destoryMenu2DataObjects();
                 Menu2.SetActive(true);
 
@@ -221,7 +212,7 @@ namespace Menu.UI.Dropdown
         }
 
 
-    
+        // Funtion to initiate & set component data w.r.t the prefab & data got as an argument
         public void GenerateMenuData( List<Data> _data,GameObject _menuPrefab, List<KeyValuePair<string, GameObject>> _menuItem,  RectTransform _parent)
         {
 
@@ -229,20 +220,15 @@ namespace Menu.UI.Dropdown
             {
                 string current = _data[i].key;
                 Data lDataobj = _data[i];
+
+                _menuItem.Add(new KeyValuePair<string, GameObject>(current, Instantiate(_menuPrefab) as GameObject));
+                GameObject lGameObj = _menuItem[i].Value;
+                _menuItem[i].Value.GetComponent<Button>().onClick.AddListener(delegate
                 {
-                    
-                    _menuItem.Add(new KeyValuePair<string, GameObject>(current, Instantiate(_menuPrefab) as GameObject));
-                    GameObject lGameObj = _menuItem[i].Value;
-                    _menuItem[i].Value.GetComponent<Button>().onClick.AddListener(delegate
-                    {
-                        onClickSlectedMenuItemButton(lDataobj, lGameObj);
-                    });
+                    onClickSlectedMenuItemButton(lDataobj, lGameObj);
+                });
 
-
-
-                }
-               
-
+                //checking the object been created or not
                 if (_menuItem[i].Value != null)
                 {
                     string sub = _data[i].value;
@@ -258,7 +244,7 @@ namespace Menu.UI.Dropdown
 
                 }
 
-
+                //coloring if needed 
                 //if (!clickedMenu1.Equals(_data))
                 //{
                 //    clickedMenu1 = _data;
@@ -283,7 +269,7 @@ namespace Menu.UI.Dropdown
         }
 
 
-
+        //Recursive funtion to draw thew Next data 
         private List<Data>FindTheNextSubData(Data _data, string _key){
             if( _data == null) return null;
 
@@ -303,12 +289,7 @@ namespace Menu.UI.Dropdown
             return null;
         }
 
-
-        private GameObject lastClickedObject;
-        List<Data> LastClickeddata; 
-        List<Data> NewSubdata; 
-      
-
+        //Delagate funtion to handle the cell click & generate the new list with respective data     
         public void onClickSlectedMenuItemButton(Data _data, GameObject _object )
         {
             
