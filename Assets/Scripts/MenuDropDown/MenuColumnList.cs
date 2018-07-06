@@ -57,7 +57,7 @@ namespace Menu.UI.Dropdown
 
         void FeedMenuBar(){
             
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 26; i++)
             {
                 Data lData = new Data();
                 lData.level = 0;
@@ -66,7 +66,7 @@ namespace Menu.UI.Dropdown
                 lData.selected = false;
 
                 lData.nestedData = new List<Data>();
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 20; j++)
                 {
                     if( lData.nestedData != null){
                         Data lData1 = new Data();
@@ -104,7 +104,6 @@ namespace Menu.UI.Dropdown
             {
                 Menu1 = Instantiate(Menu);
                 Menu1.SetActive(false);
-                //clickedMenu1 = "";
                 Menu1.transform.SetParent(MenuView.transform, false);
             }
 
@@ -114,11 +113,9 @@ namespace Menu.UI.Dropdown
             {
                 Menu2 = Instantiate(Menu);
                 Menu2.SetActive(false);
-                //clickedMenu1 = "";
                 Menu2.transform.SetParent(MenuView.transform, false);
             }
-//            clickedMenu2 = false;
-            GenerateMenu();
+            GenerateMenu();// generate the intial view 
         }
         // Update is called once per frame
         void FixedUpdate()
@@ -128,6 +125,7 @@ namespace Menu.UI.Dropdown
                 newTagAdded = false;
             }
 
+          
 
         }
 
@@ -161,10 +159,9 @@ namespace Menu.UI.Dropdown
                     MenuItem1[i].Value.GetComponentInChildren<Text>().text =  sub;
 
                     Menu1.SetActive(true);
-                    MenuItem1[i].Value.transform.SetParent(Menu1.transform, false);
+                    MenuItem1[i].Value.transform.SetParent(Menu1.GetComponent<ScrollRect>().content, false);
                     MenuItem1[i].Value.gameObject.SetActive(true);
                    
-
                 }
             }//for loop ends
             LastClickeddata = raw;
@@ -176,7 +173,7 @@ namespace Menu.UI.Dropdown
         {
             if (MenuItem1.Count > 0 )
             {
-                foreach (Transform t in Menu1.transform)
+                foreach (Transform t in Menu1.GetComponent<ScrollRect>().content)
                     Destroy(t.gameObject);
 
                 MenuItem1.Clear();
@@ -188,7 +185,7 @@ namespace Menu.UI.Dropdown
         {
            if (MenuItem2.Count > 0)
             {
-                foreach (Transform t in Menu2.transform)
+                foreach (Transform t in Menu2.GetComponent<ScrollRect>().content)
                     Destroy(t.gameObject);
 
                 MenuItem2.Clear();
@@ -203,21 +200,29 @@ namespace Menu.UI.Dropdown
             {
                 destoryMenu1DataObjects();
                 Menu1.SetActive(true);
-                GenerateMenuData(_menu1Data, _menu1Prefab, MenuItem1,Menu1);
-
+                //GenerateMenuData(_menu1Data, _menu1Prefab, MenuItem1,Menu1.GetComponent<ScrollRect>().content);
+                RectTransform parent = Menu1.GetComponent<ScrollRect>().content;
+                if (parent != null)
+                    GenerateMenuData(_menu1Data, _menu1Prefab, MenuItem1, parent);
             }
 
             if(_menu2Prefab != null){
                 destoryMenu2DataObjects();
                 Menu2.SetActive(true);
-                GenerateMenuData(_menu2Data, _menu2Prefab, MenuItem2,Menu2);
+
+                RectTransform parent = Menu2.GetComponent<ScrollRect>().content;
+                if( parent != null)
+                    GenerateMenuData(_menu2Data, _menu2Prefab, MenuItem2,parent);
+
+                Menu2.SetActive(true);
+
             }
 
         }
 
 
     
-        public void GenerateMenuData( List<Data> _data,GameObject _menuPrefab, List<KeyValuePair<string, GameObject>> _menuItem,  GameObject _parent)
+        public void GenerateMenuData( List<Data> _data,GameObject _menuPrefab, List<KeyValuePair<string, GameObject>> _menuItem,  RectTransform _parent)
         {
 
             for (int i = 0; i < _data.Count; i++)
@@ -243,7 +248,7 @@ namespace Menu.UI.Dropdown
                     string sub = _data[i].value;
 
                    _menuItem[i].Value.GetComponentInChildren<Text>().text = sub;
-                   _menuItem[i].Value.transform.SetParent(_parent.transform, false);
+                    _menuItem[i].Value.transform.SetParent(_parent, false);
                     _menuItem[i].Value.gameObject.SetActive(true);
 
                     if(_data[i].selected) // hide the image on getting the false
@@ -306,7 +311,7 @@ namespace Menu.UI.Dropdown
 
         public void onClickSlectedMenuItemButton(Data _data, GameObject _object )
         {
-            Debug.Log("SELECTED "+_data);
+            
             //MenuSubCell objMenuSubCell = _object.GetComponent<MenuSubCell>();
             //objMenuSubCell.toggleImage();
 
@@ -322,9 +327,6 @@ namespace Menu.UI.Dropdown
             Debug.Log("NEXT " + _data.key);
             string[] d = _data.key.Split('-');
             int mainIndex = Int16.Parse(d[0]);
-
-
-           
 
             if (latestClickedTab == null || !latestClickedTab.Equals(_data)) //forward motion 
             {
@@ -354,9 +356,15 @@ namespace Menu.UI.Dropdown
                     for (int i = 0; i < LastClickeddata.Count; i++)
                         LastClickeddata[i].selected = false;
 
+
+                    for (int i = 0; i < LastClickeddata.Count; i++)
+                        print("last :: " + LastClickeddata[i].value);
+
+                    for (int i = 0; i < NewSubdata.Count; i++)
+                        print("new :: " + NewSubdata[i].value);
                     // set the only being clicked
-                    MyComparer dc = new MyComparer();
-                    int pos = LastClickeddata.BinarySearch(_data,dc);
+                   // MyComparer dc = new MyComparer();
+                    int pos = LastClickeddata.FindIndex(index => index.key == _data.key);
 
                     LastClickeddata[pos].selected = true;
 
@@ -368,8 +376,7 @@ namespace Menu.UI.Dropdown
                     latestClickedTab = _data;// setting data to check on next click
                 }else{
                     // ist the last tab to generate click
-                    //MyComparer dc = new MyComparer();
-                    //int pos = NewSubdata.BinarySearch(_data, dc);
+                   
                     //NewSubdata[pos].selected = true;
 
 
@@ -393,9 +400,7 @@ namespace Menu.UI.Dropdown
                 // autheticate data before displaying the grid
                 if (LastClickeddata != null && lSubdata != null )
                 {
-                    MyComparer dc = new MyComparer();
-                    int pos = LastClickeddata.BinarySearch(_data, dc);
-                   // int pos = LastClickeddata.BinarySearch(_data);
+                    int pos = LastClickeddata.FindIndex(index => index.key == _data.key);
                     LastClickeddata[pos].selected = false;
 
                     //update the dat check varaibles
